@@ -1,5 +1,5 @@
 % This function generates an n x m matrix of random numbers
-% the nth row will hold in its 10 columns the same random number
+% The nth row will hold in its 10 columns the same random number
 % (so only different rows have different numbers)
 % Claudio Vestini
 
@@ -10,12 +10,14 @@
 % for every instance the "Run" button is pressed)
 % My value for axisDimension will be 500
 
-function matrix = RandomMatrix(n,m,axisDimensions)
-% Preallocate array in computer memory
-matrix = zeros(n,m);
-% Generate matrix
-for i = 1:n
-    % This line generates a random number in range [-axisDimension,axisDimension]
-    num = axisDimensions*(2*(rand()-1/2)); 
-    matrix(i,:) = num(1);
+function matrix = RandomMatrix(n, m, axisDimensions)
+    % Preallocate array in computer memory
+    matrix = zeros(n, m);
+    
+    % Generate matrix
+    for i = 1:n
+        % This line generates a random number in range [-axisDimensions, axisDimensions]
+        num = axisDimensions * (2 * (rand() - 1/2)); 
+        matrix(i, :) = num(1);
+    end
 end
