@@ -53,7 +53,7 @@ end
 
 % Pre-generate star coordinate nx10x2 matrix
 axisDimension = 6200;
-numberofStars = input("Select how many stars: ");
+numberofStars = 1000;
 starSize = 20;
 xy_stars = randomStarCoordinates(starSize, numberofStars, axisDimension);
 
