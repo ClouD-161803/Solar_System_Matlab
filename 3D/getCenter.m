@@ -1,12 +1,24 @@
-% This function the [X Y Z] coordinates of the Center of Mass of a planet
+% Function to compute the [X, Y, Z] coordinates of the Center of Mass (CoM) of a planet
 % Claudio Vestini
 
-function CoM = getCenter(orbitalRadius,phi,beta,orbitalVelocity)
-% Whereas phi (azimuthal angle) varies linearly the same way for all
-% planets, the deltaphi and deltatheta steps are generated 
-% according to the value of orbitalVelocity
-% The equations used are the same as in createOrbit()
-deltaphi = orbitalVelocity*phi;
-deltatheta = beta*sin(phi*orbitalVelocity);
-CoM = orbitalRadius*[cos(deltaphi) sin(deltaphi) sin(deltatheta)];
+% Inputs:
+% orbitalRadius    - Radius of the planet's orbit
+% phi              - Azimuthal angle (varies linearly for all planets)
+% beta             - Orbital inclination angle in radians
+% orbitalVelocity  - Velocity of the planet in its orbit
+
+% Output:
+% CoM              - A 1x3 array containing the X, Y, Z coordinates of the planet's Center of Mass
+
+function CoM = getCenter(orbitalRadius, phi, beta, orbitalVelocity)
+
+    % Adjust the azimuthal angle phi based on the planet's orbital velocity
+    deltaphi = orbitalVelocity * phi;
+    
+    % Adjust the inclination angle based on beta and the orbital velocity
+    deltatheta = beta * sin(phi * orbitalVelocity);
+    
+    % Compute the Center of Mass (CoM) using cylindrical polar coordinates
+    CoM = orbitalRadius * [cos(deltaphi), sin(deltaphi), sin(deltatheta)];
+    
 end

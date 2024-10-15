@@ -1,24 +1,35 @@
-% This function animates the plot of the planet's orbits
+% Function to animate the plot of a planet's orbit trail
 % Claudio Vestini
 
-% The passed array orbit must be (nSteps)x3
-% The passed array phi is 1x(nSteps)
-% The passed array planetColour is 1x3 ([R G B])
-% alpha is the angle subtended by the trail (bigger trail for larger orbits)
-% beta is the orbital inclination angle in radians
-function trailPlot = animateOrbit(CoM_pol,trailColour,alpha,beta,nSteps)
-% k outputs the index of the coordinate of the planet with respect to gamma
-k = round((alpha/(2*pi))*nSteps);
-% Orbital radius
-R = CoM_pol(2);
-% Final angle of trail
-phi1 = CoM_pol(1);
-% Start angle of trail
-phi0 = phi1 - alpha;
-% Vector of angles of circular arc (trail)
-gamma = linspace(phi0,phi1,k);
-% kx3 array of trail
-trail = createOrbit(R,gamma,beta,k);
-trailPlot = plot3(trail(:,1),trail(:,2), ...
-    trail(:,3),"Color",trailColour,"LineWidth",1.8);
+% Inputs:
+% CoM_pol      - A 1x3 array containing [phi, R, z] in polar coordinates (center of mass in polar coordinates)
+% trailColour  - A 1x3 array specifying the RGB values of the trail colour ([R G B])
+% alpha        - The angle subtended by the trail (in radians)
+% beta         - Orbital inclination angle (in radians)
+% nSteps       - Number of steps in the orbit (resolution of the trail)
+
+% Output:
+% trailPlot    - Handle to the plot object representing the orbit trail
+
+function trailPlot = animateOrbit(CoM_pol, trailColour, alpha, beta, nSteps)
+
+    % Compute the number of points (k) in the trail based on the angle alpha
+    k = round((alpha / (2 * pi)) * nSteps);
+    
+    % Extract orbital radius and current angle (phi1) from CoM_pol
+    R = CoM_pol(2);    % Orbital radius
+    phi1 = CoM_pol(1); % Final angle of the trail
+    
+    % Calculate the start angle of the trail (phi0)
+    phi0 = phi1 - alpha;
+    
+    % Generate a vector of angles (gamma) for the trail, from phi0 to phi1
+    gamma = linspace(phi0, phi1, k);
+    
+    % Create the trail as a kx3 array of coordinates using the createOrbit function
+    trail = createOrbit(R, gamma, beta, k);
+    
+    % Plot the trail in 3D and return the plot handle
+    trailPlot = plot3(trail(:,1), trail(:,2), trail(:,3), ...
+                      'Color', trailColour, 'LineWidth', 1.8);
 end

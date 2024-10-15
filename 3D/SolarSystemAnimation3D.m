@@ -1,10 +1,10 @@
 % 3D Solar System Animation to scale
 % Claudio Vestini
-clc; clear
+clc; clear;
 
 % Define animation parameters
 nSteps = 3000; % Smaller number makes planets go faster
-phi = linspace(0,2*pi,nSteps); % Vector of small angle steps
+phi = linspace(0, 2*pi, nSteps); % Vector of small angle steps
 nFaces = 20; % Number of sphere faces for each planet (2 for funny squares)
 axDim = 5000; % Axis Dimensions
 alpha = pi/6; % Angle subtended by orbit's trail
@@ -66,17 +66,18 @@ planetHex = [ ['#504E51';'#CECCD1'] ; % mercury
 % 4) planetPlots = 1x8 surface of spheres
 % 5) orbitPlots = 1x8 surface of orbits
 % Preallocate arrays into computer memory
-planets = zeros(nFaces+1,nFaces+1,3,9);
-planetOrbits = zeros(nSteps,3,9); 
-planetRGBs = zeros(9,6); 
-planetPlots = zeros(1,8); 
-orbitPlots = zeros(1,8); 
+planets = zeros(nFaces+1, nFaces+1, 3, 9);
+planetOrbits = zeros(nSteps, 3, 9); 
+planetRGBs = zeros(9, 6); 
+planetPlots = zeros(1, 8); 
+orbitPlots = zeros(1, 8);
+
 % Create arrays
 for p = 1:9
-    planets(:,:,:,p) = createPlanet3(planetSizes(p),nFaces);
+    planets(:,:,:,p) = createPlanet3(planetSizes(p), nFaces);
     planetOrbits(:,:,p) = createOrbit(planetPositions(p), ...
-                          phi,planetOrbitalAngles(p),nSteps);
-    planetColour = planetHex((2*p-1):(2*p),:);
+                          phi, planetOrbitalAngles(p), nSteps);
+    planetColour = planetHex((2*p-1):(2*p), :);
     planetRGBs(p,1:3) = hex2rgb(planetColour(1,:));
     planetRGBs(p,4:6) = hex2rgb(planetColour(2,:));
 end
@@ -87,48 +88,54 @@ end
 % iteration, then plotting all planets and deleting them shortly after
 % I also added a function that animates the orbits of planets
 
-% Set the figure in the middle of the screen and make it maximised
-f = figure('Name','Solar System Animation 3D','NumberTitle','off', ...
-    "Windowstate","Maximized");
+% Set the figure in the middle of the screen and make it maximized
+f = figure('Name', 'Solar System Animation 3D', 'NumberTitle', 'off', ...
+    'Windowstate', 'Maximized');
 % Title
-text(-1650,0,axDim*0.35,"Solar System (sizes to scale 1:500000)", ...
-    "FontSize",20,"Color","W");
-% Set the Oxyz axes and make them invisible (z axis is less relevant)
-axis([-axDim,axDim,-axDim,axDim,-axDim/4,axDim/4]); axis equal;
-set(gca,'xtick',[]); set(gca,'ytick',[]); 
-set(gca,'ztick',[]); set(gca,'Visible','off');
+text(-1650, 0, axDim*0.35, 'Solar System (sizes to scale 1:500000)', ...
+    'FontSize', 20, 'Color', 'W');
+% Set the Oxyz axes and make them invisible (z-axis is less relevant)
+axis([-axDim, axDim, -axDim, axDim, -axDim/4, axDim/4]); axis equal;
+set(gca, 'xtick', []); set(gca, 'ytick', []); 
+set(gca, 'ztick', []); set(gca, 'Visible', 'off');
 % Set black background
-set(gca,'color','k'); set(gcf,'color','k');
+set(gca, 'color', 'k'); set(gcf, 'color', 'k');
 % Set view angle
-view(0,10)
-hold on
-% Plot the Sun which corresponds to planets(:,:,:,9)
-Sun = drawPlanet3(planets(:,:,:,9),planetOrbits(1,:,9),planetRGBs(9,4:6));
+view(0, 10);
+hold on;
+
+% Plot the Sun, which corresponds to planets(:,:,:,9)
+Sun = drawPlanet3(planets(:,:,:,9), planetOrbits(1,:,9), planetRGBs(9,4:6));
+
 % Plot the planets' orbits
 for p = 1:8
-    plot3(planetOrbits(:,1,p),planetOrbits(:,2,p), ...
-        planetOrbits(:,3,p),"Color",hex2rgb('#696969')) % comedy colour
+    plot3(planetOrbits(:,1,p), planetOrbits(:,2,p), ...
+        planetOrbits(:,3,p), 'Color', hex2rgb('#696969')); % Comedy colour
 end
 
 % Main for loop
 for i = 1:nSteps
     for p = 1:8
-        % Find center of mass, this is oustide as it is used by 2 functions
-        CoM_cart = getCenter(planetPositions(p),phi(i), ...
-            planetOrbitalAngles(p),planetOrbitalVelocities(p)); % [X Y Z]
-        [theta,rho,z] = cart2pol(CoM_cart(1),CoM_cart(2),CoM_cart(3)); 
-        CoM_pol = [theta,rho,z]; % cylindrical polar [phi r z] 
+        % Find center of mass, this is outside as it is used by 2 functions
+        CoM_cart = getCenter(planetPositions(p), phi(i), ...
+            planetOrbitalAngles(p), planetOrbitalVelocities(p)); % [X Y Z]
+        [theta, rho, z] = cart2pol(CoM_cart(1), CoM_cart(2), CoM_cart(3)); 
+        CoM_pol = [theta, rho, z]; % Cylindrical polar [phi r z] 
+        
         % Add the moving orbit trail
-        orbitPlots(p) = animateOrbit(CoM_pol,planetRGBs(p,1:3), ...
-            alpha,planetOrbitalAngles(p),nSteps);
+        orbitPlots(p) = animateOrbit(CoM_pol, planetRGBs(p,1:3), ...
+            alpha, planetOrbitalAngles(p), nSteps);
+        
         % Plot the planets
         planetPlots(p) = drawPlanet3(planets(:,:,:,p), ...
-            CoM_cart,planetRGBs(p,4:6));
+            CoM_cart, planetRGBs(p,4:6));
     end
-    drawnow; pause(0.01)
+    drawnow;
+    pause(0.01);
+    
     % This deletes the old planet plots at every iteration
     if i ~= nSteps
-        delete(planetPlots)
-        delete(orbitPlots)
+        delete(planetPlots);
+        delete(orbitPlots);
     end
 end

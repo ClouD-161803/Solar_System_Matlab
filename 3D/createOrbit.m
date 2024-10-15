@@ -1,19 +1,25 @@
-% This function creates a (nSteps)x3 orbital array
+% Function to create a (nSteps)x3 array representing an orbital path
 % Claudio Vestini
 
-% The orbit will be a 3D circle tilted by inclination angle beta
-% I will use 3D Cylindrical Polar Coordinates:
-% x = rho*cos(phi)
-% y = rho*sin(phi)
-% z = z
-function orbit = createOrbit(orbitalRadius,phi,beta,nSteps)
-% Pre allocate array into computer memory
-orbit = zeros(nSteps,3);
-% x coordinates
-orbit(:,1) = orbitalRadius*cos(phi);
-% y coordinates
-orbit(:,2) = orbitalRadius*sin(phi);
-% z coordinates - I am using nested sin() for orbital inclination
-theta = beta*sin(phi); % Vector of values ranging from -beta to +beta
-orbit(:,3) = orbitalRadius*sin(theta); % I am effectively taking sin of sin
+% The orbit is a 3D circle with an inclination defined by angle beta.
+% Cylindrical polar coordinates are used:
+% x = rho * cos(phi)
+% y = rho * sin(phi)
+% z = function of orbital inclination (beta)
+
+function orbit = createOrbit(orbitalRadius, phi, beta, nSteps)
+
+    % Pre-allocate the array for better performance
+    orbit = zeros(nSteps, 3);
+    
+    % Compute x-coordinates of the orbit using polar coordinates
+    orbit(:,1) = orbitalRadius * cos(phi);
+    
+    % Compute y-coordinates of the orbit using polar coordinates
+    orbit(:,2) = orbitalRadius * sin(phi);
+    
+    % Compute z-coordinates based on the orbital inclination angle beta
+    % Using nested sin() for inclination effects
+    theta = beta * sin(phi);  % Theta ranges from -beta to +beta
+    orbit(:,3) = orbitalRadius * sin(theta);  % Apply sin(theta) for z-axis variation
 end

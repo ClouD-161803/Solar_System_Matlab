@@ -1,17 +1,25 @@
-% This function creates the shape of planets (spheres) in a 21x21x3 array
+% Function to create the shape of a planet (sphere) in a (nFaces+1)x(nFaces+1)x3 array
 % Claudio Vestini
 
-% To create the planet array, I will use the in-built sphere function:
-% [X,Y,Z] = sphere returns the x-, y-, and z- coordinates of a sphere 
-% without drawing it. The returned sphere has a radius equal to 1 
-% and consists of n-by-n faces. The function returns the x-, y-, 
-% and z- coordinates as three (n+1)-by-(n+1) matrices
+% This function generates a 3D sphere using the built-in sphere function.
+% The sphere is scaled to the specified planetSize and returned as a 3D array.
 
-function planet =  createPlanet3(planetSize,nFaces)
-% XYZ coordinates of a 3D sphere with 50 faces
-[X,Y,Z] = sphere(nFaces);
-% Planet is a 51x51x3 3dimensional array
-planet(:,:,1) = X*planetSize;
-planet(:,:,2) = Y*planetSize;
-planet(:,:,3) = Z*planetSize;
+% Inputs:
+% planetSize - Size (radius) of the planet
+% nFaces     - Number of faces for the sphere (smoothness)
+
+% Output:
+% planet     - A (nFaces+1)x(nFaces+1)x3 array containing the x, y, z coordinates
+
+function planet = createPlanet3(planetSize, nFaces)
+
+    % Generate the XYZ coordinates for a unit sphere with nFaces faces
+    [X, Y, Z] = sphere(nFaces);
+    
+    % Scale the sphere to the specified planetSize
+    % Store the scaled coordinates in a 3D array:
+    planet(:,:,1) = X * planetSize; % X-coordinates
+    planet(:,:,2) = Y * planetSize; % Y-coordinates
+    planet(:,:,3) = Z * planetSize; % Z-coordinates
+    
 end
